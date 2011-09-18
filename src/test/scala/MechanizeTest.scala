@@ -4,23 +4,23 @@ package cn.orz.pascal.scala.mechanize
 // vim: set ts=4 sw=4 et:
 import org.scalatest.WordSpec
 import org.scalatest.matchers.ShouldMatchers
+import java.net.URL
 
 class MechanaizeTest extends WordSpec with ShouldMatchers {
-    "'http://www.google.com'" when{
+    "GET 'http://www.google.co.jp'" when{
         val agent:Mechanize = new Mechanize() 
-        val page:HtmlPage = agent.get("http://www.google.com")
+        val page:HtmlPage = agent.get("http://www.google.co.jp")
 
-        "title is Google" in {
-            page.title should be("Google")
-        }
+        page.title should be("Google")
+        page.url should be(new URL("http://www.google.co.jp/"))
+
     }
 
-    "'http://www.amazon.co.jp/'" when{
+    "GET 'http://www.amazon.co.jp/'" when{
         val agent:Mechanize = new Mechanize() 
         val page:HtmlPage = agent.get("http://www.amazon.co.jp/")
 
-        "title is Amazon.co.jp： 通販 - ファッション、家電から食品まで【無料配送】" in {
-            page.title should be("Amazon.co.jp： 通販 - ファッション、家電から食品まで【無料配送】")
-        }
+        page.title should be("Amazon.co.jp： 通販 - ファッション、家電から食品まで【無料配送】")
+        page.url should be(new URL("http://www.amazon.co.jp/"))
     }
 }
