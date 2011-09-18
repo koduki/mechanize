@@ -13,9 +13,13 @@ class MechanaizeTest extends WordSpec with ShouldMatchers {
 
         page.title should be("Google")
         page.url should be(new URL("http://www.google.co.jp/"))
-        page.forms(0).name should be("f")
-        page.forms(0).method should be(Get)
-        
+
+        val form = page.forms(0)
+        form.name should be("f")
+        form.method should be(Get)
+        form.fields_with(Name("q"))(0).name should be("q")
+        //form.submit()
+
     }
 
     "GET 'http://www.amazon.co.jp/'" when{
@@ -27,3 +31,4 @@ class MechanaizeTest extends WordSpec with ShouldMatchers {
         page.forms(0).name should be("site-search")
     }
 }
+
