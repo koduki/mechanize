@@ -6,17 +6,12 @@ import java.net.URL
 
 // vim: set ts=4 sw=4 et:
 abstract class HttpMethod
-case class Get extends HttpMethod
-case class Post extends HttpMethod
-case class Put extends HttpMethod
-case class Delete extends HttpMethod
-case class Head extends HttpMethod
-/*
-object HttpMethod extends Enumeration { 
-    val HTTP_METHOD = Value
-  val GET,POST = Value 
-}
-*/
+case object Get extends HttpMethod
+case object Post extends HttpMethod
+case object Put extends HttpMethod
+case object Delete extends HttpMethod
+case object Head extends HttpMethod
+
 class HtmlPage(val page:HtmlUnitPage) {
     def title:String =  page.getTitleText
     def url:URL = page.getUrl
@@ -30,9 +25,9 @@ class HtmlForm(val form:HtmlUnitForm) {
     def name:String = form.getNameAttribute
     def method:HttpMethod = {
         form.getMethodAttribute.toUpperCase match {
-          case "GET" => Get()
-          case "POST" => Post()
-          case _ => Get()
+          case "GET" => Get
+          case "POST" => Post
+          case _ => Get
         }
     }
 }

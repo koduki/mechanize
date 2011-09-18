@@ -14,7 +14,7 @@ class MechanaizeTest extends WordSpec with ShouldMatchers {
         page.title should be("Google")
         page.url should be(new URL("http://www.google.co.jp/"))
         page.forms(0).name should be("f")
-        page.forms(0).method should be(Get())
+        page.forms(0).method should be(Get)
         
     }
 
