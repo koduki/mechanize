@@ -16,7 +16,9 @@ case object Head extends HttpMethod
 
 abstract class FieldAttribute() { def value:String }
 case class Name(val value:String) extends FieldAttribute
-
+case class Class(val value:String) extends FieldAttribute
+case class Type(val value:String) extends FieldAttribute
+case class XPath(val value:String) extends FieldAttribute
 
 class HtmlPage(val page:HtmlUnitPage) {
     def title:String =  page.getTitleText
@@ -36,9 +38,23 @@ class HtmlForm(val form:HtmlUnitForm) {
         }
     }    
     def submit():HtmlPage = new HtmlPage(form.click.asInstanceOf[HtmlUnitPage])
-    def fields_with(attribute:FieldAttribute):List[HtmlField] = {
-        form.getInputsByName(attribute.value).toList.map(new HtmlField(_))
 
+    def fields_with(attribute:FieldAttribute):List[HtmlField] = {
+        (attribute match {
+          case Name(value) => findByXpath(".//input[@name='" + value + "']", form)
+          case Class(value) => findByXpath(".//input[@class='" + value + "']", form)
+          case Type(value) => findByXpath(".//input[@type='" + value + "']", form)
+          case XPath(xpath) => findByXpath(xpath, form)
+        }).map( node => new HtmlField(node.asInstanceOf[HtmlUnitInput]))
+    }
+
+    def findByXpath(xpathValue:String, node:org.w3c.dom.Node):List[org.w3c.dom.Node] = {
+        import javax.xml.xpath._
+        import org.w3c.dom._
+        
+        val xpathParser = XPathFactory.newInstance().newXPath().compile(xpathValue)
+        val nodelist = xpathParser.evaluate(node, XPathConstants.NODESET).asInstanceOf[NodeList]
+        (0 to nodelist.getLength).map( i => nodelist.item(i)).toList
     }
 }
 class HtmlField(val field:HtmlUnitInput) {
