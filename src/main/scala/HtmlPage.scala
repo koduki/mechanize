@@ -39,6 +39,10 @@ class HtmlForm(val form:HtmlUnitForm) {
     }    
     def submit():HtmlPage = new HtmlPage(form.click.asInstanceOf[HtmlUnitPage])
 
+    def field(id:String):HtmlField = {
+        new HtmlField(form.getElementById(id).asInstanceOf[HtmlUnitInput])
+    }
+
     def fields_with(attribute:FieldAttribute):List[HtmlField] = {
         (attribute match {
           case Name(value) => findByXpath(".//input[@name='" + value + "']", form)
@@ -59,4 +63,6 @@ class HtmlForm(val form:HtmlUnitForm) {
 }
 class HtmlField(val field:HtmlUnitInput) {
     def name():String = field.getNameAttribute
+    def value:String = field.getValueAttribute
+    def value_=(value:String) = new HtmlPage(field.setValueAttribute(value).asInstanceOf[HtmlUnitPage])
 }

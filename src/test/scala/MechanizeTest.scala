@@ -14,14 +14,22 @@ class MechanaizeTest extends WordSpec with ShouldMatchers {
         page.title should be("Google")
         page.url should be(new URL("http://www.google.co.jp/"))
 
-        val form = page.forms(0)
+        val form:HtmlForm = page.forms(0)
         form.name should be("f")
         form.method should be(Get)
         form.fields_with(Name("q"))(0).name should be("q")
         form.fields_with(Class("lst"))(0).name should be("q")
         form.fields_with(Type("hidden"))(0).name should be("hl")
         form.fields_with(XPath(".//input[@type='hidden' and @value='hp']"))(0).name should be("source")
-        //form.submit()
+        
+        val input:HtmlField = form.fields_with(Name("q"))(0)
+        input.value should be("")
+        input.value = "Scala"
+        input.value should be("Scala")
+
+        val result_page:HtmlPage = form.submit()
+        result_page.title should be("Google")
+        result_page.forms(0).field("lst-ib").name should be("q")
 
     }
 
