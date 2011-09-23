@@ -6,7 +6,7 @@ Not only HTML but JavaScript is supported.
 Thanks to  [Mechanize(ruby)](https://github.com/tenderlove/mechanize) and [HtmlUnit](http://htmlunit.sourceforge.net/). 
 
 ## Building
-    sbt update publish-local
+    sbt clean update package
 
 ## Example
     import cn.orz.pascal.scala.mechanize._
