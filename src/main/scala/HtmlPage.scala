@@ -26,6 +26,7 @@ class HtmlPage(val page:HtmlUnitPage) {
     def forms:List[HtmlForm] = {
         page.getForms.map(new HtmlForm(_)).toList
     }
+    def asXml = scala.xml.XML.loadString(page.asXml)
 }
 
 class HtmlForm(val form:HtmlUnitForm) {
@@ -61,6 +62,7 @@ class HtmlForm(val form:HtmlUnitForm) {
         (0 to nodelist.getLength).map( i => nodelist.item(i)).toList
     }
 }
+
 class HtmlField(val field:HtmlUnitInput) {
     def name():String = field.getNameAttribute
     def value:String = field.getValueAttribute

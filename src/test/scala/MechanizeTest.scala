@@ -30,6 +30,7 @@ class MechanaizeTest extends WordSpec with ShouldMatchers {
         val result_page:HtmlPage = form.submit()
         result_page.title should be("Google")
         result_page.forms(0).field("lst-ib").name should be("q")
+        result_page.asXml.isInstanceOf[scala.xml.Elem] should be(true)
 
     }
 
