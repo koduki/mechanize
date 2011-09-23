@@ -16,7 +16,7 @@ class MechanaizeTest extends WordSpec with ShouldMatchers {
         (page.get(Id("hplogo")) \ "@title").text should be("Google")
         (page.get(Class("jhp")) \ "@class").text should be("jhp")
         (page.get(Name("f")) \ "@action").text should be("/search")
-        (page.get(XPath("/html/body/div[3]/center/span/center/form")) \ "@action").text should be("/search")
+        (page.get(XPath(".//center/form")) \ "@action").text should be("/search")
  
         val form:HtmlForm = page.forms(0)
         form.name should be("f")
