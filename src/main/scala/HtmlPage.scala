@@ -40,7 +40,6 @@ trait HtmlBase {
         } 
     }
 
-
     implicit def htmlelement2domnode(x:HtmlUnitElement):DomNode = new {
         def asXml() = x.asXml
         def dom() = x
@@ -49,19 +48,16 @@ trait HtmlBase {
         }
     } 
 
+    def asXml:Node = { toNode(source.asXml) }
+
     def get(attr:FieldAttribute):Node = {
         val element = (attr match {
             case Id(value) => source.getElementById2(value)
-        //    case Name(value) => findByXpath(".//input[@name='" + value + "']", form)
-        //    case Class(value) => findByXpath(".//input[@class='" + value + "']", form)
-        //    case Type(value) => findByXpath(".//input[@type='" + value + "']", form)
-            case XPath(xpath) => findByXpath(xpath, source.dom).first.asInstanceOf[HtmlUnitElement]
+            case Name(value) => findByXpath(".//*[@name='" + value + "']", source.dom).first
+            case Class(value) => findByXpath(".//*[@class='" + value + "']", source.dom).first
+            case XPath(xpath) => findByXpath(xpath, source.dom).first
         })
         (toNode(element.asXml)\"body")(0).child(0)
-    }
-
-    def asXml:scala.xml.Node = {
-        toNode(source.asXml)
     }
 
     protected def toNode(src:String) = {
@@ -80,18 +76,17 @@ trait HtmlBase {
         saxer.rootElem
     }
 
-    def findByXpath(xpathValue:String, node:org.w3c.dom.Node):List[org.w3c.dom.Node] = {
+    protected def findByXpath(xpathValue:String, node:org.w3c.dom.Node):List[HtmlUnitElement] = {
         import javax.xml.xpath._
         import org.w3c.dom._
         
         val xpathParser = XPathFactory.newInstance().newXPath().compile(xpathValue)
         val nodelist = xpathParser.evaluate(node, XPathConstants.NODESET).asInstanceOf[NodeList]
-        (0 to nodelist.getLength).map( i => nodelist.item(i)).toList
+        (0 to nodelist.getLength).map( i => nodelist.item(i).asInstanceOf[HtmlUnitElement]).toList
     }
 }
 
 class HtmlPage(val page:HtmlUnitPage) extends HtmlBase {
-    page.getElementById2("")
     def source = page
 
     def title:String =  page.getTitleText
