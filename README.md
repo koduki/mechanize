@@ -6,20 +6,20 @@ Not only HTML but JavaScript is supported.
 Thanks to  [Mechanize(ruby)](https://github.com/tenderlove/mechanize) and [HtmlUnit](http://htmlunit.sourceforge.net/). 
 
 ## Building
- sbt update publish-local
+  sbt update publish-local
 
 ## Example
- import cn.orz.pascal.scala.mechanize._
- val agent = new Mechanize()
- val page  = agent.get("http://www.google.co.jp")
- val form  = page.forms(0)
- val input = form.fields_with(Name("q"))(0)
-
- input.value = "Scala"
+  import cn.orz.pascal.scala.mechanize._
+  val agent = new Mechanize()
+  val page  = agent.get("http://www.google.co.jp")
+  val form  = page.forms(0)
+  val input = form.fields_with(Name("q"))(0)
  
- val result_page = form.submit()
- val body = result_page.asXml
- body \\ "title" text
+  input.value = "Scala"
+  
+  val result_page = form.submit()
+  val body = result_page.asXml
+  body \\ "title" text
 
 
 ## License 
