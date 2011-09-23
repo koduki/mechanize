@@ -13,7 +13,9 @@ class MechanaizeTest extends WordSpec with ShouldMatchers {
 
         page.title should be("Google")
         page.url should be(new URL("http://www.google.co.jp/"))
-
+        (page.get(Id("hplogo")) \ "@title").text should be("Google")
+        (page.get(XPath(".//div[@id='hplogo']")) \ "@title").text should be("Google")
+ 
         val form:HtmlForm = page.forms(0)
         form.name should be("f")
         form.method should be(Get)
@@ -30,7 +32,7 @@ class MechanaizeTest extends WordSpec with ShouldMatchers {
         val result_page:HtmlPage = form.submit()
         result_page.title should be("Google")
         result_page.forms(0).field("lst-ib").name should be("q")
-        result_page.asXml.isInstanceOf[scala.xml.Elem] should be(true)
+        result_page.asXml.isInstanceOf[scala.xml.Node] should be(true)
 
     }
 
@@ -54,8 +56,8 @@ class MechanaizeTest extends WordSpec with ShouldMatchers {
     "GET 'http://www.ebookjapan.jp/ebj/search.asp?q=%96%B2%97%88%92%B9%82%CB%82%DE&ebj_desc=on'" when {
         val agent:Mechanize = new Mechanize() 
         val page:HtmlPage = agent.get("http://www.ebookjapan.jp/ebj/search.asp?q=%96%B2%97%88%92%B9%82%CB%82%DE&ebj_desc=on")
-        page.asXml.isInstanceOf[scala.xml.Elem] should be(true)
-        page.get(Id("main_line")).isInstanceOf[scala.xml.Elem] should be(true)
+        page.asXml.isInstanceOf[scala.xml.Node] should be(true)
+        page.get(Id("main_line")).isInstanceOf[scala.xml.Node] should be(true)
       } 
 }
 
