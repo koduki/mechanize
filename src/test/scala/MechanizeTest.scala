@@ -55,6 +55,7 @@ class MechanaizeTest extends WordSpec with ShouldMatchers {
         val agent:Mechanize = new Mechanize() 
         val page:HtmlPage = agent.get("http://www.ebookjapan.jp/ebj/search.asp?q=%96%B2%97%88%92%B9%82%CB%82%DE&ebj_desc=on")
         page.asXml.isInstanceOf[scala.xml.Elem] should be(true)
+        page.get(Id("main_line")).isInstanceOf[scala.xml.Elem] should be(true)
       } 
 }
 
