@@ -26,7 +26,22 @@ class HtmlPage(val page:HtmlUnitPage) {
     def forms:List[HtmlForm] = {
         page.getForms.map(new HtmlForm(_)).toList
     }
-    def asXml = scala.xml.XML.loadString(page.asXml)
+    def asXml = {
+        import java.io.StringReader
+        import scala.xml.Node
+        import scala.xml.parsing.NoBindingFactoryAdapter
+        import nu.validator.htmlparser.sax.HtmlParser
+        import nu.validator.htmlparser.common.XmlViolationPolicy
+        import org.xml.sax.InputSource
+
+        val hp = new HtmlParser
+        hp.setNamePolicy(XmlViolationPolicy.ALLOW)
+
+        val saxer = new NoBindingFactoryAdapter
+        hp.setContentHandler(saxer)
+        hp.parse(new InputSource(new StringReader(page.asXml)))
+        saxer.rootElem
+    }
 }
 
 class HtmlForm(val form:HtmlUnitForm) {
