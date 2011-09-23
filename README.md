@@ -6,7 +6,10 @@ Not only HTML but JavaScript is supported.
 Thanks to  [Mechanize(ruby)](https://github.com/tenderlove/mechanize) and [HtmlUnit](http://htmlunit.sourceforge.net/). 
 
 ## Building
-    sbt clean update package
+    sbt clean update publish-local
+
+## build.sbt
+    libraryDependencies += "cn.orz.pascal" %% "mechanize" % "0.1"
 
 ## Example
     import cn.orz.pascal.scala.mechanize._
