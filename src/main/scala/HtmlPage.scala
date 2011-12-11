@@ -57,7 +57,11 @@ trait HtmlBase {
             case Class(value) => findByXpath(".//*[@class='" + value + "']", source.dom).first
             case XPath(xpath) => findByXpath(xpath, source.dom).first
         })
-        (toNode(element.asXml)\"body")(0).child(0)
+        if (element != null) {
+          (toNode(element.asXml)\"body")(0).child(0)
+        } else {
+          null 
+        }
     }
 
     protected def toNode(src:String) = {
