@@ -16,15 +16,15 @@ class MechanaizeTest extends WordSpec with ShouldMatchers {
         (page.get(Id("hplogo")) \ "@title").text should be("Google")
         (page.get(Class("jhp")) \ "@class").text should be("jhp")
         (page.get(Name("f")) \ "@action").text should be("/search")
-        (page.get(XPath(".//center/form")) \ "@action").text should be("/search")
- 
+        (page.get(XPath(".//div/form")) \ "@action").text should be("/search")
+
         val form:HtmlForm = page.forms(0)
         form.name should be("f")
         form.method should be(Get)
         form.fields_with(Name("q"))(0).name should be("q")
-        form.fields_with(Class("lst"))(0).name should be("q")
+        form.fields_with(Class("lst lst-tbb"))(0).name should be("q")
         form.fields_with(Type("hidden"))(0).name should be("hl")
-        form.fields_with(XPath(".//input[@type='hidden' and @value='hp']"))(0).name should be("source")
+//        form.fields_with(XPath(".//input[value='hp']"))(0).name should be("source")
         
         val input:HtmlField = form.fields_with(Name("q"))(0)
         input.value should be("")
@@ -35,7 +35,6 @@ class MechanaizeTest extends WordSpec with ShouldMatchers {
         result_page.title should be("Google")
         result_page.forms(0).field("lst-ib").name should be("q")
         result_page.asXml.isInstanceOf[scala.xml.Node] should be(true)
-
     }
 
     "GET 'http://www.amazon.co.jp/'" when {
@@ -52,7 +51,6 @@ class MechanaizeTest extends WordSpec with ShouldMatchers {
         form.fields_with(Class("searchSelect"))(0).name should be("field-keywords")
         form.fields_with(Type("text"))(0).name should be("field-keywords")
         form.fields_with(XPath(".//input[@type='text' and @title='検索']"))(0).name should be("field-keywords")
- 
     }
 
     "GET 'http://www.ebookjapan.jp/ebj/search.asp?q=%96%B2%97%88%92%B9%82%CB%82%DE&ebj_desc=on'" when {

@@ -7,7 +7,7 @@ import com.gargoylesoftware.htmlunit.html.{HtmlInput => HtmlUnitInput}
 import com.gargoylesoftware.htmlunit.html.{DomNode => DomUnitNode}
 import java.net.URL
 import scala.collection.JavaConversions._
-import scala.xml.Node 
+import scala.xml.Elem 
 
 // vim: set ts=4 sw=4 et:
 abstract class HttpMethod
@@ -48,9 +48,9 @@ trait HtmlBase {
         }
     } 
 
-    def asXml:Node = { toNode(source.asXml) }
+    def asXml:Elem = { toNode(source.asXml) }
 
-    def get(attr:FieldAttribute):Node = {
+    def get(attr:FieldAttribute):Elem = {
         val element = (attr match {
             case Id(value) => source.getElementById2(value)
             case Name(value) => findByXpath(".//*[@name='" + value + "']", source.dom).first
@@ -58,13 +58,14 @@ trait HtmlBase {
             case XPath(xpath) => findByXpath(xpath, source.dom).first
         })
         if (element != null) {
-          (toNode(element.asXml)\"body")(0).child(0)
+          val node = ((toNode(element.asXml) \ "html" \ "body")(0)).child(0)
+          Elem(node.prefix, node.label, node.attributes, node.scope, node)
         } else {
           null 
         }
     }
 
-    protected def toNode(src:String) = {
+    protected def toNode(src:String):Elem = {
         import java.io.StringReader
         import scala.xml.parsing.NoBindingFactoryAdapter
         import nu.validator.htmlparser.sax.HtmlParser
@@ -77,7 +78,9 @@ trait HtmlBase {
         val saxer = new NoBindingFactoryAdapter
         hp.setContentHandler(saxer)
         hp.parse(new InputSource(new StringReader(src)))
-        saxer.rootElem
+        val root = saxer.rootElem
+
+        Elem(root.prefix, root.label, root.attributes, root.scope, root)
     }
 
     protected def findByXpath(xpathValue:String, node:org.w3c.dom.Node):List[HtmlUnitElement] = {
