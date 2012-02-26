@@ -15,7 +15,13 @@ class Mechanize {
     val logger = LogFactory.getLog("com.gargoylesoftware.htmlunit").asInstanceOf[Jdk14Logger].getLogger
     logger.setLevel(Level.OFF)
 
+    def isJavaScriptEnabled() = client.isJavaScriptEnabled
+    def isJavaScriptEnabled_= (isEnabled:Boolean) {
+        client.setJavaScriptEnabled(isEnabled)
+      }
+
     def get(url:String):HtmlPage = {
+        client.waitForBackgroundJavaScript(10000)
         new HtmlPage(client.getPage(new URL(url)))
     }
 }

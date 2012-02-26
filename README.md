@@ -9,7 +9,7 @@ Thanks to  [Mechanize(ruby)](https://github.com/tenderlove/mechanize) and [HtmlU
     sbt clean update publish-local
 
 ## build.sbt
-    libraryDependencies += "cn.orz.pascal" %% "mechanize" % "0.1"
+    libraryDependencies += "cn.orz.pascal" %% "mechanize" % "0.2"
 
 ## Example
     import cn.orz.pascal.scala.mechanize._
