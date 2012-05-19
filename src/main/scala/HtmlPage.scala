@@ -1,4 +1,4 @@
-package cn.orz.pascal.scala.mechanize
+package cn.orz.pascal.mechanize
 
 import com.gargoylesoftware.htmlunit.html.{HtmlElement => HtmlUnitElement}
 import com.gargoylesoftware.htmlunit.html.{HtmlPage => HtmlUnitPage}
