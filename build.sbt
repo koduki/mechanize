@@ -1,6 +1,6 @@
 name := "mechanize"
 
-version := "0.2"
+version := "0.3"
 
 organization := "cn.orz.pascal"
 
